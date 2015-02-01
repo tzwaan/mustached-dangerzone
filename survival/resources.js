@@ -15,6 +15,7 @@ module.exports = function() {
     });
     console.log(source_ids);
     source_ids.forEach( function(source) {
+        console.log(source);
         console.log(source.distance);
     });
 }
