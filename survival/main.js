@@ -31,7 +31,7 @@ if (!Memory.init) {
                 });
             });
             Memory.resources[sources[source_name].id] = {
-                'distance_to_spawn' : distance
+                'distance' : distance
             };
         }
     }
