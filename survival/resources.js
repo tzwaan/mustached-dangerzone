@@ -18,7 +18,48 @@ module.exports = function() {
         console.log(source);
         console.log(source.distance);
     });
+};
+
+// initialize the Resources memory.
+// should be per room, is global now.
+module.exports.init = function(room) {
+    var new_sources = room.find(Game.SOURCES);
+    var spawn = room.find(Game.MY_SPAWNS)[0];
+
+    for (var source_name in new_sources) {
+        var path = spawn.pos.findPathTo(new_sources[source_name]);
+        var distance = 0;
+        path.forEach(function(step) {
+            var look = room.lookAt(step.x, step.y);
+            look.forEach(function(object) {
+                if (object.type == 'terrain') {
+                    if (object.terrain == 'swamp') {
+                        distance += 5;
+                    }
+                    else {
+                        distance += 1;
+                    }
+                }
+            });
+        });
+        Memory.resources[new_sources[source_name].id] = {
+            'distance' : distance
+        };
+    }
 }
 
 module.exports.creep_needed = function(source_id) {
-}
+};
+
+/*
+module.exports.command_creeps = function() {
+    sources.forEach( function(source) {
+        source.miners.forEach( function(creep) {
+            miner(creep);
+        });
+        source.carriers.forEach( function(creep) {
+            carrier(creep);
+        });
+    });
+};
+*/
