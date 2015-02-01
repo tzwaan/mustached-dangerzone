@@ -11,7 +11,7 @@ if (!Memory.init) {
     Memory.resources = {};
     Memory.max_parts = 5;
 
-    Game.rooms.forEach(Resources.init(room));
+    Game.rooms.forEach(Resources.init);
 }
 
 Resources();
