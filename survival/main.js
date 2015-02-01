@@ -1,3 +1,8 @@
+/*
+ * Main module.
+ */
+var C = require('constants');
+
 if (!Memory.init) {
     Memory.init = true;
     Memory.resources = {};
