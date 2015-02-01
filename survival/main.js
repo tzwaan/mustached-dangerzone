@@ -1,4 +1,4 @@
-if (Memory.init === false) {
+if (!Memory.init) {
     Memory.init = true;
     Memory.resources = {};
     Memory.total_parts = 5;
