@@ -2,6 +2,7 @@
  * Main module.
  */
 var C = require('constants');
+var resources = require('resources');
 
 if (!Memory.init) {
     Memory.init = true;
@@ -35,3 +36,5 @@ if (!Memory.init) {
         }
     }
 }
+
+resources();

@@ -10,10 +10,13 @@ var C = require('constants');
 var sources = Memory.resources;
 
 module.exports = function() {
-    source_ids = _.sortBy(sources, function(n) {
+    var source_ids = _.sortBy(sources, function(n) {
         return n.distance;
     });
     console.log(source_ids);
+    source_ids.forEach( function(source) {
+        console.log(source.distance);
+    });
 }
 
 module.exports.creep_needed = function(source_id) {
