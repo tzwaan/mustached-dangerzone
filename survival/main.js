@@ -1,4 +1,4 @@
-if (Memory.init == false) {
+if (Memory.init === false) {
     Memory.init = true;
     Memory.resources = {};
     Memory.total_parts = 5;
@@ -11,9 +11,9 @@ if (Memory.init == false) {
         for (var source_name in sources) {
             var path = spawn.pos.findPathTo(sources[source_name]);
             var distance = 0;
-            path.forEach(function(step)) {
+            path.forEach(function(step) {
                 var look = room.lookAt(step.x, step.y);
-                look.forEach(function(object)) {
+                look.forEach(function(object) {
                     if (object.type == 'terrain') {
                         if (object.terrain == 'swamp') {
                             distance += 5;
@@ -22,8 +22,8 @@ if (Memory.init == false) {
                             distance += 1;
                         }
                     }
-                }
-            }
+                });
+            });
             Memory.resources[sources[source_name].id] = {
                 'distance_to_spawn' : distance
             };
