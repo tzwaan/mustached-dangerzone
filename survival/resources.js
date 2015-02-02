@@ -3,7 +3,7 @@
  *
  * nr of carriers needed:
  * You need 10 energy each tick, so:
- * carriers = (2 * miner_yield * distance) / load
+ * nr_carriers = (2 * miner_yield * distance) / load
  */
 var _ = require('lodash');
 var C = require('constants');
@@ -51,7 +51,50 @@ module.exports.init = function(room) {
 module.exports.creep_needed = function(source_id) {
 };
 
+// returns either false or the number of [work] parts that are needed.
+module.exports.miner_needed = function(source_id) {
+    var source = Memory.resources[source_id];
+    var nr_work = 0;
+    source.miners.forEach(function(creep) {
+        Game.creeps[creep].body.forEach(function(body_part) {
+            if (body_part == Game.WORK) {
+                nr_work++;
+            }
+        });
+    });
+    // should be calculated, now hardcoded.
+    var miner_max = 5;
+    var miner_needed = miner_max - nr_work;
+
+    if (miner_needed > 0) {
+        return miner_needed;
+    }
+    return false;
+};
+
+// returns either false or the number of [carry&move] parts that are needed.
+module.exports.carrier_needed = function(source_id) {
+    var source = Memory.resources[source_id];
+    var nr_carry = 0;
+    source.carriers.forEach(function(creep) {
+        Game.creeps[creep].body.forEach(function(body_part) {
+            if (body_part == Game.CARRY) {
+                nr_carry++;
+            }
+        });
+    });
+    // should be calculated, now hardcoded.
+    var miner_yield = 10;
+    carrier_needed = ((2 * miner_yield * source.distance) / 50) - nr_carry;
+
+    if (carrier_needed > 0) {
+        return carrier_needed;
+    }
+    return false;
+};
+
 /*
+// commands all creeps associated with this resource
 module.exports.command_creeps = function() {
     sources.forEach( function(source) {
         source.miners.forEach( function(creep) {
