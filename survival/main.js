@@ -3,6 +3,7 @@
  */
 var C = require('constants');
 var Resources = require('resources');
+var Spawner = require('spawner');
 
 // Init is still on a game start basis, but should be on a per room basis.
 // meaning: whenever a new room is found, initialize the room.
@@ -19,5 +20,7 @@ if (!Memory.init) {
 Resources();
 
 for (var source_id in Memory.resources) {
-    console.log(Resources.creep_needed(source_id));
+    if (var needed = Resources.creep_needed(source_id)) {
+        var creep = Spawner(needed);
+    }
 }
