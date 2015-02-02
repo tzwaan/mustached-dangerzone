@@ -55,6 +55,7 @@ module.exports.creep_needed = function(source_id) {
 
 // returns either false or the number of [work] parts that are needed.
 function miner_needed(source_id) {
+    console.log(source_id);
     var source = Memory.resources[source_id];
     var nr_work = 0;
     source.miners.forEach(function(creep) {
