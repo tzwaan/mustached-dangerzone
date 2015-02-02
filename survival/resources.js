@@ -13,11 +13,11 @@ module.exports = function() {
     var source_ids = _.sortBy(sources, function(n) {
         return n.distance;
     });
-    console.log(source_ids);
+    /*
     source_ids.forEach( function(source) {
-        console.log(source);
         console.log(source.distance);
     });
+    */
 };
 
 // initialize the Resources memory.
@@ -50,7 +50,40 @@ module.exports.init = function(room) {
     }
 }
 
+/* returns either false or an object with the needed:
+ * type
+ * body
+ * source_id
+ */
 module.exports.creep_needed = function(source_id) {
+    var miner = miner_needed(source_id);
+    var body = [];
+    if (miner) {
+        body.push(Game.MOVE);
+        body.push(Game.CARRY);
+
+        while (body.length < Memory.max_parts && (body.length - 2) < miner) {
+            body.push(Game.WORK);
+        }
+        return {
+            'type' : C.MINER,
+            'body' : body,
+            'source_id' : source_id
+        };
+    }
+    var carrier = carrier_needed(source_id);
+    if (carrier) {
+        while ((body.length + 2) <= Memory.max_parts && (body.length / 2) < carrier) {
+            body.push(Game.MOVE);
+            body.push(Game.CARRY);
+        }
+        return {
+            'type' : C.CARRIER,
+            'body' : body,
+            'source_id' : source_id
+        };
+    }
+    return false;
 };
 
 // returns either false or the number of [work] parts that are needed.

@@ -19,5 +19,5 @@ if (!Memory.init) {
 Resources();
 
 for (var source_id in Memory.resources) {
-    console.log(Resources.miner_needed(source_id));
+    console.log(Resources.creep_needed(source_id));
 }
