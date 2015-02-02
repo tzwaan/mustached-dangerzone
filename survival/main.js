@@ -17,3 +17,6 @@ if (!Memory.init) {
 }
 
 Resources();
+
+console.log(Resources.miner_needed(Memory.resources[0]));
+console.log(Resources.carrier_needed(Memory.require[0]));
