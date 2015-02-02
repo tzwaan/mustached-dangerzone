@@ -18,5 +18,7 @@ if (!Memory.init) {
 
 Resources();
 
-console.log(Memory.resources[0]);
-console.log(Resources.miner_needed(Memory.resources[0]));
+for (var index in Memory.resources) {
+    console.log(Memory.resources[index]);
+    console.log(Resources.miner_needed(Memory.resources[index]));
+}
