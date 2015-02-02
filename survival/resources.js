@@ -54,8 +54,8 @@ module.exports.creep_needed = function(source_id) {
 };
 
 // returns either false or the number of [work] parts that are needed.
+module.exports.miner_needed = miner_needed;
 function miner_needed(source_id) {
-    console.log(source_id);
     var source = Memory.resources[source_id];
     var nr_work = 0;
     source.miners.forEach(function(creep) {
@@ -74,10 +74,10 @@ function miner_needed(source_id) {
     }
     return false;
 }
-module.exports.miner_needed = miner_needed;
 
 // returns either false or the number of [carry&move] parts that are needed.
-module.exports.carrier_needed = function(source_id) {
+module.exports.carrier_needed = carrier_needed;
+function carrier_needed(source_id) {
     var source = Memory.resources[source_id];
     var nr_carry = 0;
     source.carriers.forEach(function(creep) {
