@@ -57,6 +57,7 @@ module.exports.creep_needed = function(source_id) {
 function miner_needed(source_id) {
     console.log(source_id);
     var source = Memory.resources[source_id];
+    /*
     var nr_work = 0;
     source.miners.forEach(function(creep) {
         Game.creeps[creep].body.forEach(function(body_part) {
@@ -72,6 +73,7 @@ function miner_needed(source_id) {
     if (miner_needed > 0) {
         return miner_needed;
     }
+    */
     return false;
 }
 module.exports.miner_needed = miner_needed;
