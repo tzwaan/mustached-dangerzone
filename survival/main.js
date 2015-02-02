@@ -20,4 +20,3 @@ Resources();
 
 console.log(Memory.resources[0]);
 console.log(Resources.miner_needed(Memory.resources[0]));
-console.log(Resources.carrier_needed(Memory.resources[0]));
