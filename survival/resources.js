@@ -43,7 +43,9 @@ module.exports.init = function(room) {
             });
         });
         Memory.resources[new_sources[source_name].id] = {
-            'distance' : distance
+            'distance' : distance,
+            'miners' : [],
+            'carriers' : []
         };
     }
 }
