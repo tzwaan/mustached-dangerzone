@@ -20,6 +20,7 @@ if (!Memory.init) {
 Resources();
 
 for (var source_id in Memory.resources) {
+    console.log(source_id);
     var needed = Resources.creep_needed(source_id);
     if (needed) {
         var creep = Spawner(needed);

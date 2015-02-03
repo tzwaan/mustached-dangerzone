@@ -91,20 +91,14 @@ function creep_needed(source_id) {
 // returns either false or the number of [work] parts that are needed.
 module.exports.miner_needed = miner_needed;
 function miner_needed(source_id) {
-    var source = Memory.resources[source_id];
-    var nr_work = 0;
-    source.miners.forEach(function(creep) {
-        Game.creeps[creep].body.forEach(function(body_part) {
-            if (body_part == Game.WORK) {
-                nr_work++;
-            }
-        });
-    });
-    // should be calculated, now hardcoded.
+    var nr_work = get_workforce(source_id, Game.WORK);
+    var miner_yield = 10;
+
+    var needed = miner_yield - nr_work;
 
 
-    if (miner_needed > 0) {
-        return miner_needed;
+    if (needed > 0) {
+        return needed;
     }
     return false;
 }
@@ -112,25 +106,31 @@ function miner_needed(source_id) {
 // returns either false or the number of [carry&move] parts that are needed.
 module.exports.carrier_needed = carrier_needed;
 function carrier_needed(source_id) {
-    var source = Memory.resources[source_id];
-    var nr_carry = 0;
-    source.carriers.forEach(function(creep) {
-        Game.creeps[creep].body.forEach(function(body_part) {
-            if (body_part == Game.CARRY) {
-                nr_carry++;
-            }
-        });
-    });
     // should be calculated, now hardcoded.
     // considering that the miners are the same
     var miner_yield = 10;
-    carrier_needed = ((2 * miner_yield * source.distance) / 50) - nr_carry;
+    var source = Memory.resources[source_id];
+    var nr_carry = get_workforce(source_id, Game.CARRY);
+    needed = ((2 * miner_yield * source.distance) / 50) - nr_carry;
 
-    if (carrier_needed > 0) {
-        return carrier_needed;
+    if (needed > 0) {
+        return needed;
     }
     return false;
 };
+
+function get_workforce(source_id, type) {
+    var source = Memory.resources[source_id];
+    var nr_type = 0;
+    source.carriers.forEach(function(creep) {
+        Game.creeps[creep].body.forEach(function(body_part) {
+            if (body_part == type) {
+                nr_type++;
+            }
+        });
+    });
+    return nr_type;
+}
 
 /*
 // commands all creeps associated with this resource
