@@ -45,7 +45,8 @@ module.exports.init = function(room) {
         Memory.resources[new_sources[source_name].id] = {
             'distance' : distance,
             'miners' : [],
-            'carriers' : []
+            'carriers' : [],
+	    'pos' : new_sources[source_name].pos
         };
     }
 }
@@ -99,8 +100,7 @@ function miner_needed(source_id) {
         });
     });
     // should be calculated, now hardcoded.
-    var miner_max = 5;
-    var miner_needed = miner_max - nr_work;
+
 
     if (miner_needed > 0) {
         return miner_needed;
@@ -121,6 +121,7 @@ function carrier_needed(source_id) {
         });
     });
     // should be calculated, now hardcoded.
+    // considering that the miners are the same
     var miner_yield = 10;
     carrier_needed = ((2 * miner_yield * source.distance) / 50) - nr_carry;
 
