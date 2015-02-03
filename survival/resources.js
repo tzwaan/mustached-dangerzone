@@ -56,7 +56,8 @@ module.exports.init = function(room) {
  * body
  * source_id
  */
-module.exports.creep_needed = function(source_id) {
+module.exports.creep_needed = creep_needed;
+function creep_needed(source_id) {
     var miner = miner_needed(source_id);
     var body = [];
     if (miner) {
