@@ -29,6 +29,9 @@ module.exports.init = function(room) {
     for (var source_name in new_sources) {
         var path = spawn.pos.findPathTo(new_sources[source_name]);
         var distance = 0;
+	var x = new_sources[source_name].pos.x;
+	var y = new_sources[source_name].pos.y;
+
         path.forEach(function(step) {
             var look = room.lookAt(step.x, step.y);
             look.forEach(function(object) {
@@ -46,7 +49,7 @@ module.exports.init = function(room) {
             'distance' : distance,
             'miners' : [],
             'carriers' : [],
-	    'pos' : new_sources[source_name].pos
+	    'pos' : {'x': x, 'y': y}
         };
     }
 }
