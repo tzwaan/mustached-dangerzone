@@ -10,14 +10,10 @@ var C = require('constants');
 var sources = Memory.resources;
 
 module.exports = function() {
-    var source_ids = _.sortBy(sources, function(n) {
-        return n.distance;
-    });
-    /*
-    source_ids.forEach( function(source) {
-        console.log(source.distance);
-    });
-    */
+	//sort the sources by distance
+	var source_ids = Object.keys(sources).sort(function(a, b){
+	    	return sources[a].distance - sources[b].distance; });
+	creep_needed(source_ids[0]);
 };
 
 // initialize the Resources memory.
@@ -47,10 +43,10 @@ module.exports.init = function(room) {
         });
         Memory.resources[new_sources[source_name].id] = {
             'distance' : distance,
-            'miners' : [],
-            'carriers' : [],
 	    'pos' : {'x': x, 'y': y}
         };
+	Memory.resources[new_sources[source_name].id][C.MINER.id] = [];
+	Memory.resources[new_sources[source_name].id][C.CARRIER.id] = [];
     }
 }
 
@@ -66,15 +62,16 @@ function creep_needed(source_id) {
     if (miner) {
         body.push(Game.MOVE);
         body.push(Game.CARRY);
-
+	
+	//create creep bodyparts
         while (body.length < Memory.max_parts && (body.length - 2) < miner) {
             body.push(Game.WORK);
         }
-        return {
-            'type' : C.MINER,
+        Memory.spawnQueue.push({
+            'type' : C.MINER.id,
             'body' : body,
             'source_id' : source_id
-        };
+        });
     }
     var carrier = carrier_needed(source_id);
     if (carrier) {
@@ -82,11 +79,11 @@ function creep_needed(source_id) {
             body.push(Game.MOVE);
             body.push(Game.CARRY);
         }
-        return {
-            'type' : C.CARRIER,
+        Memory.spawnQueue.push({
+            'type' : C.CARRIER.id,
             'body' : body,
             'source_id' : source_id
-        };
+        });
     }
     return false;
 };
@@ -94,13 +91,12 @@ function creep_needed(source_id) {
 // returns either false or the number of [work] parts that are needed.
 module.exports.miner_needed = miner_needed;
 function miner_needed(source_id) {
-    var nr_work = get_workforce(source_id, Game.WORK);
-    var miner_yield = 10;
+    var nr_work = get_workforce(source_id, C.MINER);
+    var miner_yield = 6;
 
     var needed = miner_yield - nr_work;
 
-
-    if (needed > 0) {
+    if (needed >= 1) {
         return needed;
     }
     return false;
@@ -111,12 +107,12 @@ module.exports.carrier_needed = carrier_needed;
 function carrier_needed(source_id) {
     // should be calculated, now hardcoded.
     // considering that the miners are the same
-    var miner_yield = 10;
+    var miner_yield = 6;
     var source = Memory.resources[source_id];
-    var nr_carry = get_workforce(source_id, Game.CARRY);
-    needed = ((2 * miner_yield * source.distance) / 50) - nr_carry;
+    var nr_carry = get_workforce(source_id, C.CARRIER);
+    var needed = ((2 * miner_yield * source.distance) / 50) - nr_carry;
 
-    if (needed > 0) {
+    if (needed >= 1) {
         return needed;
     }
     return false;
@@ -124,27 +120,41 @@ function carrier_needed(source_id) {
 
 function get_workforce(source_id, type) {
     var source = Memory.resources[source_id];
+
     var nr_type = 0;
-    source.carriers.forEach(function(creep) {
-        Game.creeps[creep].body.forEach(function(body_part) {
-            if (body_part == type) {
-                nr_type++;
-            }
-        });
-    });
+    if (source[type.id].length > 0){
+	    source[type.id].forEach(function(creep) {
+        	Game.creeps[creep].body.forEach(function(body_part) {
+			if (body_part.type == type.body) {
+				nr_type++;
+			}
+        	});
+	    });
+    }
+    var queue = Memory.spawnQueue;
+    for(var i=0; i < queue.length; i++){
+	    if (queue[i].source_id == source_id){
+		    queue[i].body.forEach(function(body_part) {
+			    if (body_part == type.body){
+				    nr_type++;
+			    }
+		    });
+	    }
+	}
+
     return nr_type;
 }
 
-/*
-// commands all creeps associated with this resource
-module.exports.command_creeps = function() {
-    sources.forEach( function(source) {
-        source.miners.forEach( function(creep) {
-            miner(creep);
-        });
-        source.carriers.forEach( function(creep) {
-            carrier(creep);
-        });
-    });
-};
-*/
+	/*
+	// commands all creeps associated with this resource
+	module.exports.command_creeps = function() {
+	    sources.forEach( function(source) {
+		source.miners.forEach( function(creep) {
+		    miner(creep);
+		});
+		source.carriers.forEach( function(creep) {
+		    carrier(creep);
+		});
+	    });
+	};
+	*/
