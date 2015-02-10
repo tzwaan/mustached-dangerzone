@@ -1,4 +1,4 @@
-/* 
+/*
  * Module used to command the miners.
  */
 var C = require('constants');
@@ -7,7 +7,7 @@ module.exports = function (creep){
 	var mem_source = Memory.resources[creep.memory.source_id];
 	var x = mem_source.pos.x;
 	var y = mem_source.pos.y;
-	
+
 	var source = creep.room.lookAt(x, y)[0].source;
 	if (!creep.pos.isNearTo(source)){
 		creep.moveTo(source.pos);
