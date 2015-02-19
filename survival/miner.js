@@ -17,10 +17,11 @@ module.exports = function (creep){
 		if(carriers.length > 0){
 			carriers.forEach(function(carrier){
 				carrier = Game.creeps[carrier];
-				console.log(carrier);
-                if (!carrier.spawning) {
-                    if (carrier.pos.isNearTo(creep)){
-                        creep.transferEnergy(carrier);
+                if (carrier) {
+                    if (!carrier.spawning) {
+                        if (carrier.pos.isNearTo(creep)){
+                            creep.transferEnergy(carrier);
+                        }
                     }
                 }
 			});

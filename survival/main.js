@@ -31,7 +31,9 @@ else{
 			miner(creep);
 		}
 		if (creep.memory.type == C.CARRIER.id){
-			carrier(creep, Game.spawns.Spawn1);
+            if (!creep.spawning) {
+                carrier(creep, Game.spawns.Spawn1);
+            }
 		}
 	}
 }

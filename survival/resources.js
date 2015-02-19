@@ -13,9 +13,11 @@ module.exports = function() {
 	//sort the sources by distance
 	var source_ids = Object.keys(sources).sort(function(a, b){
 	    	return sources[a].distance - sources[b].distance; });
-    for (var source in source_ids) {
-        if (creep_needed(source_ids[source])) {
-            break;
+    if (Memory.spawnQueue.length < 6) {
+        for (var source in source_ids) {
+            if (creep_needed(source_ids[source])) {
+                break;
+            }
         }
     }
 };
@@ -116,7 +118,7 @@ function carrier_needed(source_id) {
     var nr_work = get_workforce(source_id, C.MINER);
     var source = Memory.resources[source_id];
     var nr_carry = get_workforce(source_id, C.CARRIER);
-    var needed = ((4 * nr_work * source.distance) / 50) - nr_carry;
+    var needed = Math.ceil(((4 * nr_work * source.distance) / 50) - nr_carry + 1);
 
     if (needed >= 1) {
         return needed;
