@@ -27,7 +27,6 @@ else{
 	//testing the miner
 	for(var creep_name in Game.creeps){
 		var creep = Game.creeps[creep_name];
-		console.log(creep);
 		if (creep.memory.type == C.MINER.id){
 			miner(creep);
 		}

@@ -13,7 +13,11 @@ module.exports = function() {
 	//sort the sources by distance
 	var source_ids = Object.keys(sources).sort(function(a, b){
 	    	return sources[a].distance - sources[b].distance; });
-	creep_needed(source_ids[0]);
+    for (var source in source_ids) {
+        if (creep_needed(source_ids[source])) {
+            break;
+        }
+    }
 };
 
 // initialize the Resources memory.
@@ -62,7 +66,7 @@ function creep_needed(source_id) {
     if (miner) {
         body.push(Game.MOVE);
         body.push(Game.CARRY);
-	
+
 	//create creep bodyparts
         while (body.length < Memory.max_parts && (body.length - 2) < miner) {
             body.push(Game.WORK);
@@ -72,6 +76,7 @@ function creep_needed(source_id) {
             'body' : body,
             'source_id' : source_id
         });
+        return true;
     }
     var carrier = carrier_needed(source_id);
     if (carrier) {
@@ -84,6 +89,7 @@ function creep_needed(source_id) {
             'body' : body,
             'source_id' : source_id
         });
+        return true;
     }
     return false;
 };
@@ -107,10 +113,10 @@ module.exports.carrier_needed = carrier_needed;
 function carrier_needed(source_id) {
     // should be calculated, now hardcoded.
     // considering that the miners are the same
-    var miner_yield = 6;
+    var nr_work = get_workforce(source_id, C.MINER);
     var source = Memory.resources[source_id];
     var nr_carry = get_workforce(source_id, C.CARRIER);
-    var needed = ((2 * miner_yield * source.distance) / 50) - nr_carry;
+    var needed = ((4 * nr_work * source.distance) / 50) - nr_carry;
 
     if (needed >= 1) {
         return needed;
@@ -125,9 +131,9 @@ function get_workforce(source_id, type) {
     if (source[type.id].length > 0){
 	    source[type.id].forEach(function(creep) {
         	Game.creeps[creep].body.forEach(function(body_part) {
-			if (body_part.type == type.body) {
-				nr_type++;
-			}
+                if (body_part.type == type.body) {
+                    nr_type++;
+                }
         	});
 	    });
     }

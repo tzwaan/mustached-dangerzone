@@ -18,9 +18,11 @@ module.exports = function (creep){
 			carriers.forEach(function(carrier){
 				carrier = Game.creeps[carrier];
 				console.log(carrier);
-				if (carrier.pos.isNearTo(creep)){
-					creep.transferEnergy(carrier);
-				}
+                if (!carrier.spawning) {
+                    if (carrier.pos.isNearTo(creep)){
+                        creep.transferEnergy(carrier);
+                    }
+                }
 			});
 		}
 	}
