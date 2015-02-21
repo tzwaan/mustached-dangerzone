@@ -20,6 +20,7 @@ if (!Memory.init) {
     }
 }
 else{
+    creep_upkeep();
 	Resources();
 
 	//hardcode spawn
@@ -36,4 +37,14 @@ else{
             }
 		}
 	}
+}
+
+function creep_upkeep() {
+    for (var creep_name in Memory.creeps) {
+        if (!Game.creeps[creep_name]) {
+            console.log("Dead creep named " + creep_name + " found.");
+            Resources.remove_creep(creep_name);
+            delete Memory.creeps[creep_name];
+        }
+    }
 }

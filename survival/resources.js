@@ -126,6 +126,15 @@ function carrier_needed(source_id) {
     return false;
 };
 
+module.exports.remove_creep = remove_creep;
+function remove_creep(creep_name) {
+    var type = Memory.creeps[creep_name].type;
+    var source_id = Memory.creeps[creep_name].source_id;
+    console.log("Removing creep " + creep_name + " with type: " + type + ", and source_id: " + source_id + ".");
+    var i = Memory.resources[source_id][type].indexOf(creep_name);
+    delete Memory.resources[source_id][type][i];
+}
+
 function get_workforce(source_id, type) {
     var source = Memory.resources[source_id];
 
@@ -142,13 +151,29 @@ function get_workforce(source_id, type) {
     var queue = Memory.spawnQueue;
     for(var i=0; i < queue.length; i++){
 	    if (queue[i].source_id == source_id){
-		    queue[i].body.forEach(function(body_part) {
-			    if (body_part == type.body){
-				    nr_type++;
-			    }
-		    });
+            if (queue[i].type == type.id) {
+                queue[i].body.forEach(function(body_part) {
+                    if (body_part == type.body){
+                        nr_type++;
+                    }
+                });
+            }
 	    }
 	}
+    for (var spawn_id in Game.spawns) {
+        var spawn = Game.spawns[spawn_id];
+        if (spawn.spawning) {
+            if (Memory.creeps[spawn.spawning.name].source_id == source_id) {
+                if (Memory.creeps[spawn.spawning.name].type == type.id) {
+                    Game.creeps[spawn.spawning.name].body.forEach(function(body_part) {
+                        if (body_part == type.body) {
+                            nr_type++;
+                        }
+                    });
+                }
+            }
+        }
+    }
 
     return nr_type;
 }

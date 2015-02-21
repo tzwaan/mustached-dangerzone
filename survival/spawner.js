@@ -14,8 +14,8 @@ module.exports = {
 				       {'source_id': needed.source_id,
 					       'type': needed.type});
 
-			if(needed.type == C.MINER.id || needed.type == C.CARRIER.id){
-				if(_.isString(result)){
+            if(_.isString(result)){
+                if(needed.type == C.MINER.id || needed.type == C.CARRIER.id){
 					Memory.resources[needed.source_id][needed.type].push(
 						result);
 				}
