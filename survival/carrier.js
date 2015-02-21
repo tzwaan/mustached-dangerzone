@@ -1,6 +1,8 @@
 /*
  * The module for the carriers.
  */
+var C = require('constants');
+var _ = require('lodash');
 
 module.exports = function carry(creep, destination){
 	var source = Game.getObjectById(creep.memory.source_id);
@@ -18,8 +20,18 @@ module.exports = function carry(creep, destination){
                 creep.moveTo(target);
             }
         }
+        else if (creep.pos.inRangeTo(source, 3)) {
+            var target = creep.pos.findClosest(Game.MY_CREEPS, {
+                filter: function(object) {
+                    return (object.memory.source_id == creep.memory.source_id
+                        &&
+                        object.memory.type == C.MINER.id);
+                }
+            });
+            creep.moveTo(target);
+        }
         else {
-            creep.moveTo(source.pos.x, source.pos.y);
+            creep.moveTo(source);
         }
 	}
 	else{
