@@ -1,4 +1,5 @@
 #swap files
 *.swp
+*.swo
 node_modules/
 Gruntfile.js
